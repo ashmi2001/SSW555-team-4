@@ -8,8 +8,13 @@ import Screen from "../components/Screen";
 import AppFormField from "../components/AppFormField";
 import { addContactSchema, ContactFormData } from "../schemas/ContactSchema";
 import SubmitButton from "../components/AppSubmitButton";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "../config/navigation";
+import { contacts } from "../tests/testingData";
 
 const AddContactScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+
   const methods = useForm<ContactFormData>({
     resolver: zodResolver(addContactSchema),
     defaultValues: {
@@ -19,20 +24,22 @@ const AddContactScreen = () => {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    try {
-      console.log("test",data);
-      let postObj = {
-        user_id: "testerEmail1@gmail.com",
-        contacts: [{
-          contact_name: data.name,
-          phone_number: data.number
-        }]
-      }
-      const response = await axios.post('http://10.0.2.2:5000/emergencyContacts', postObj);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    contacts.push({ contact_name: data.name, phone_number: data.number });
+    // try {
+    //   console.log("test",data);
+    //   let postObj = {
+    //     user_id: "testerEmail1@gmail.com",
+    //     contacts: [{
+    //       contact_name: data.name,
+    //       phone_number: data.number
+    //     }]
+    //   }
+    //   const response = await axios.post('http://10.0.2.2:5000/emergencyContacts', postObj);
+    //   console.log(response.data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    navigation.replace("Contacts");
   };
 
   return (
@@ -51,7 +58,7 @@ const AddContactScreen = () => {
             keyboardType="phone-pad"
           />
         </View>
-        <View>
+        <View style={styles.btnContainer}>
           <SubmitButton title="Add Contact" onSubmit={onSubmit} />
         </View>
       </Screen>
@@ -60,6 +67,9 @@ const AddContactScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  btnContainer: {
+    marginBottom: 20,
+  },
   container: {
     padding: 50,
     justifyContent: "space-between",
