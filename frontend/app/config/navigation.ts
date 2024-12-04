@@ -5,6 +5,8 @@ export type RootStackParamList = {
   AddContact: undefined;
   Contacts: undefined;
   Settings: undefined;
+  TermsOfUse: undefined;
+  Analytics: undefined;
 };
 
 export type NavigationProp = StackNavigationProp<RootStackParamList>;
